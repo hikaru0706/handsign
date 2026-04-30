@@ -8,7 +8,13 @@ def sign_all_pages(input_pdf, output_pdf, font_file):
     # 2. サインの内容（今日の日付と名前）
     today = datetime.date.today()
     tomorrow = today + datetime.timedelta(days=1)
-    formatted_date = f"{today.year}.{today.month}.{tomorrow.day}"
+    weekday = today.weekday()  # 0=月, 4=金, 5=土, 6=日
+    days_to_monday = {4: 3, 5: 2, 6: 1}
+    if weekday in days_to_monday:  # 金土日 → 月曜
+        monday = today + datetime.timedelta(days=days_to_monday[weekday])
+        formatted_date = f"{monday.year}.{monday.month}.{monday.day}"
+    else:
+        formatted_date = f"{tomorrow.year}.{tomorrow.month}.{tomorrow.day}"
     
     signature_lines = [
         formatted_date,
